@@ -163,8 +163,8 @@ class Model(ModelBase):
     """
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        if self.config["output_size"] % 64 != 0:
-            raise FaceswapError("Phaze-A output shape must be a multiple of 64")
+        if self.config["output_size"] % 16 != 0:
+            raise FaceswapError("Phaze-A output shape must be a multiple of 16")
 
         self._validate_encoder_architecture()
         self.config["freeze_layers"] = self._select_freeze_layers()
@@ -186,7 +186,7 @@ class Model(ModelBase):
             super().build()
             return
         with self._settings.strategy_scope():
-            model = self._io._load()  # pylint:disable=protected-access
+            model = self.io.load()
             model = self._update_dropouts(model)
             self._model = model
             self._compile_model()

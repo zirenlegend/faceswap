@@ -521,8 +521,8 @@ class AlignedFace():
         """ :class:`lib.align.PoseEstimate`: The estimated pose in 3D space. """
         with self._cache.lock("pose"):
             if self._cache.pose is None:
-                lms = cv2.transform(np.expand_dims(self._frame_landmarks, axis=1),
-                                    self._matrices["legacy"]).squeeze()
+                lms = np.nan_to_num(cv2.transform(np.expand_dims(self._frame_landmarks, axis=1),
+                                    self._matrices["legacy"]).squeeze())
                 self._cache.pose = PoseEstimate(lms)
         return self._cache.pose
 
